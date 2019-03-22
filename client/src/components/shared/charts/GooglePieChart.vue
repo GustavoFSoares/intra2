@@ -13,7 +13,6 @@ export default {
                 title: this.title,
                 is3D: this.is3d,
                 pieHole: this.hole,
-                
             }
         }
     },
@@ -32,7 +31,7 @@ export default {
     },
     created() {
         Object.assign(this.options, this.congigurations)
-        if(this.showExemple) {
+        if(this.showExemple || this.data.length == false) {
             alert( " ['Year', 'Sales'],\n ['2014', 1000,],\n ['2015', 1170,],\n ['2016', 660, ],\n ['2017', 1030,],\n" )
             this.chartData = [['Year', 'Sales'], ['2014', 1000,], ['2015', 1170,], ['2016', 660, ], ['2017', 1030,]]
         } else {

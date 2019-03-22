@@ -1,5 +1,5 @@
 <template>
-    <vue-google-chart ref="chart" class="chart" :type="chartType" :data="chartData" :options="options"/>    
+    <vue-google-chart ref="chart" class="chart" :type="chartType" :data="chartData" :options="options"/>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
                 title: this.title,
                 vAxes: { 0: {title: this.vIndex }, },
                 hAxes: { 0: {title: this.hIndex }, },
-                curveType: this.curveType ? 'function':'none'
+                isStacked: this.stacked,
             },
         }
     },
@@ -23,10 +23,10 @@ export default {
         title: { type: String, default: 'Titulo' },
         vIndex: { type: String, default: '' },
         hIndex: { type: String, default: 'H-Index' },
-        curveType: { type: Boolean, default: false },
+        stacked: { type: Boolean, default: false },
         congigurations: { type: Object },
         showExemple: { type: Boolean, default: false },
-        area: { type: Boolean, default: false },
+        collumn: { type: Boolean, default: false },
     },
     methods: {
         getChartOnHtml() {
@@ -34,12 +34,12 @@ export default {
         }
     },
     created() {
-        this.chartType = this.area ? 'AreaChart' : 'LineChart'
+        this.chartType = this.collumn ? 'CollumnChart' : 'BarChart'
         Object.assign(this.options, this.congigurations)
         
         if(this.showExemple || this.data.length == false) {
-            alert( "['Year', 'Sales', 'Expenses']\n ['2004',  1000,      400]\n ['2005',  1170,      460]\n ['2006',  660,       1120]\n ['2007',  1030,      540]" )
-            this.chartData = [['Year', 'Sales', 'Expenses'], ['2004', 1000, 400], ['2005', 1170, 460], ['2006', 660,  1120], ['2007', 1030, 540]]
+            alert( "[['City', '2010 Population', '2000 Population']\n ['New York City, NY', 8175000, 8008000]\n ['Los Angeles, CA', 3792000, 3694000]\n ['Chicago, IL', 2695000, 2896000]\n ['Houston, TX', 2099000, 1953000]\n ['Philadelphia, PA', 1526000, 1517000]]" )
+            this.chartData = [['City', '2010 Population', '2000 Population'], ['New York City, NY', 8175000, 8008000], ['Los Angeles, CA', 3792000, 3694000], ['Chicago, IL', 2695000, 2896000], ['Houston, TX', 2099000, 1953000], ['Philadelphia, PA', 1526000, 1517000]]
         } else {
             this.chartData = this.data
         }
