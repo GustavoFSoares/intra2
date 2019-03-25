@@ -1,12 +1,45 @@
 <template>
     <div class="container-fluid">
-        <h1>{{ title }}</h1>
+        <div>
+            <div class="mt-3">
+                <h1>{{ title }}</h1>
 
-        <router-link class="button btn btn-outline-secondary btn-lg" :to="{name: 'hht/add'}" tag="button">
-            Cadastrar Treinamento
-        </router-link>
+                 <router-link class="button btn btn-outline-secondary btn-lg" :to="{name: 'hht/add'}" tag="button">
+                    Cadastrar Treinamento
+                </router-link>
+            </div>
+        </div>
 
-        <table v-if="trainings" class="table table-striped">
+        <div class="icon-chart">
+            <router-link :to="{'name': 'hht/relatorio'}">
+                <icon icon="chart-pie" size="2x"/>
+            </router-link>
+        </div>
+
+        <div class="training-filters">
+
+            <div class="places ">
+                <button class="btn btn-outline-clean btn-lg" v-bind:class="{ 'active': filter.place=='HU' }" @click="filter.place = 'HU'">
+                    Hospital Universitário
+                </button>
+                <button class="btn btn-outline-clean btn-lg" v-bind:class="{ 'active': filter.place=='HPSC' }" @click="filter.place = 'HPSC'">
+                    Hospital de Pronto Socorro
+                </button>
+            </div>
+
+            <hr>
+            <div class="types">
+                <button class="btn btn-outline-primary btn-lg" v-bind:class="{ 'active': filter.type=='Técnico-Específico' }" @click="filteringType('Técnico-Específico')">
+                    Técnico-Específico
+                </button>
+                <button class="btn btn-outline-info btn-lg" v-bind:class="{ 'active': filter.type=='Institucional' }" @click="filteringType('Institucional')">
+                    Institucional
+                </button>
+            </div>
+
+         </div>
+
+         <table v-if="trainings" class="table table-striped mt-3">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -20,7 +53,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(training, index) of trainings" :key="index">
+                <tr v-for="(training, index) of searchList" :key="index">
                     <td scope="row">{{ training.id }}</td>
                     <td>{{ training.name }}</td>
                     <td>{{ training.enterprise.substr(0, 11) }}</td>
@@ -61,6 +94,11 @@ export default {
         return {
             title: "Lista de Treinamentos",
             trainings: [],
+            filter: {
+                text: '',
+                place: 'HU',
+                type: '',
+            },
             moment: moment,
             alert: {
                 done: { title: "Terminando o treinamento?", message: "Você está marcando este treinamento como realizado."+
@@ -92,6 +130,63 @@ export default {
             workload = model.getWorkloadObject(workload)
             return `${workload.hour}:${workload.minute}`
         },
+        filteringType(type) {
+            if( this.filter.type == type ) {
+                this.filter.type = false
+            } else {
+                this.filter.type = type
+            }
+        },
+    },
+    computed: {
+        searchList() {
+            if(this.filter.text) {
+                let exp = new RegExp(this.filter.text.trim(), 'i')
+                
+                let list = ''
+                return this.secondFiler.filter(training => {
+                    training = training.row
+                    if( exp.test(training.id)) {
+                        return exp
+                    } else if( exp.test(training.training.name)) {
+                        return exp
+                    } else if( exp.test(training.group.name)) {
+                        return exp
+                    } else if( exp.test(training.bed)) {
+                        return exp
+                    } else if( exp.test(training.type)) {
+                        return exp
+                    } else if( exp.test( this.$options.filters.humanizeDate(training.registerTime.date) ) ) {
+                        return exp
+                    }
+                })
+            } else {
+                return this.secondFiler
+            }
+        },
+        secondFiler() {
+            if(this.trainings.length == 0) {
+                return []
+            }
+            
+            let trainings = this.trainings
+            if(this.filter.place) {
+                trainings = trainings.filter(tr => {
+                    if(tr.enterprise == this.filter.place) {
+                        return tr
+                    }
+                })
+            }
+            
+            if(this.filter.type) {
+                trainings = trainings.filter(tr => {
+                    if(tr.type.toUpperCase() == this.filter.type.toUpperCase()) {
+                        return tr
+                    }
+                })
+            }
+            return trainings
+        },
     },
     mounted() {
         getter.getTrainings().then(res => { this.trainings = res })
@@ -100,20 +195,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .space {
-        margin-top: 3%;
+    .training-filters {
+        margin-top: 1rem !important;
+        
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        
+        width: 50%;
+        
+        hr { 
+            width: 100%;
+        }
+        
+        .places, .types {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        button {
+            margin-left: 10px;
+        }
     }
 
-    .classe {
-        color: #575757d3;
-    }
-
-    table {
-        margin-top: 10px;
-    }
-
-    .modal-header {
-        display: block;
+    .icon-chart {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translate(-2em, 5.5251em);
     }
 </style>
 
