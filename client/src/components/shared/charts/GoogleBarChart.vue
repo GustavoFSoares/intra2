@@ -34,7 +34,7 @@ export default {
         }
     },
     created() {
-        this.chartType = this.collumn ? 'CollumnChart' : 'BarChart'
+        this.chartType = this.collumn ? 'ColumnChart' : 'BarChart'
         Object.assign(this.options, this.congigurations)
         
         if(this.showExemple || this.data.length == false) {
