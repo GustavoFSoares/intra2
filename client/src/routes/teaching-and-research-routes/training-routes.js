@@ -1,6 +1,7 @@
 import index from "@/components/training";
 import Form from "@/components/training/Form.vue";
 import AddParticipants from "@/components/training/AddParticipants.vue";
+import Report from "@/components/training/report/";
 
 export default [
     {
@@ -27,4 +28,10 @@ export default [
         name: 'hht/lista-participantes',
         meta: { requiresAuth: true, groupAuth: ['tecnologia-da-informacao-hu', 'recursos-humanos-hu'], levelAuth: 3 }
     },
+    {
+        path: '/usuario/hora-homem-treinamento/relatorio',
+        component: Report,
+        name: 'hht/relatorio',
+        meta: { requiresAuth: true, groupAuth: ['tecnologia-da-informacao-hu', 'recursos-humanos-hu'], levelAuth: 3 }
+    }
 ]
