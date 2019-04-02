@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(report) of searchList" :key="report.id" v-bind:class="{'table-info': report.filtered == false, 'table-disabled': report.closed}">
+                <tr v-for="(report) of searchList" :key="report.id" v-bind:class="{'table-disabled': report.closed}">
                     <th>{{ report.id }}</th>
                     <td>{{ report.event.substr(0, 40) }}</td>
                     <td>{{ report.reportPlace }}</td>
@@ -43,7 +43,7 @@
                         <router-link :to='`notificacao-de-incidentes/edit/${report.id}`' v-if="gotPermission && report.closed != true">
                             <icon v-tooltip.top="'Editar'" icon="edit"/>
                         </router-link>
-                        <router-link :to='`notificacao-de-incidentes/detalhe/${report.id}`'>
+                        <router-link :to='`notificacao-de-incidentes/detalhe/${report.id}`' v-if="report.filtered || report.closed">
                             <icon v-tooltip.top="'Detalhe'" class="text-warning" icon="search"/>
                         </router-link>
                     </td>

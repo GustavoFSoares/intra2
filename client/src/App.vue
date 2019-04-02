@@ -22,6 +22,7 @@
 
         <router-view @rootEvent="userUpdating++"/>
         <footer-app/>
+        
     </div>
 </template>
 
@@ -144,8 +145,11 @@ export default {
     }
 
     .disabled {
-        pointer-events: none;
-        cursor: none;
+        .btn, button {
+            pointer-events: none;
+            cursor: none;
+            opacity: 0.4;
+        }
     }
     
     .text-disabled {
@@ -163,6 +167,23 @@ export default {
 
     .btn-outline-warning:hover:not(:disabled)  {
         color: #ffffff;
+    }
+
+    .btn-outline-light {
+        color: black;
+    }
+
+    .btn-outline-clean {
+        color: var(--font-color);
+        background-color: transparent;
+        background-image: none;
+        border-color: var(--font-color);
+
+        &.active, &:hover:not([disabled='disabled']) {
+            color: #fff;
+            background-color: var(--font-color);
+            border-color: var(--font-color);
+        }
     }
 
     div {

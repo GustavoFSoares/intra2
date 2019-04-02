@@ -1,6 +1,6 @@
 <template>
     <div v-show="error">
-        <span class="text-danger" v-show="!attribute || show">
+        <span class="text-danger" v-show="attribute === '' || show">
             {{text}}
         </span>
     </div>

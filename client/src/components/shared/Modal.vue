@@ -63,6 +63,7 @@ export default {
         close() {
             $(`#${this.id}`).modal('hide')
             this.$emit('close')
+            this.$emit('return')
             this.$emit('input', false)
         },
         destroy() {

@@ -1,29 +1,33 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <h1>{{ title }}</h1>
 
-        <div class="row">
-            <div id="navigation" class="col-md-2 order-md-1 mb-4">
+        <div class="page-container">
+            <div class="navigation" >
                     
-                <div id="form">
-                    <h5>Navegação</h5>
-                    <ul class="list-group" v-scroll-spy-active="{class: 'watched'}" v-scroll-spy-link>
-                        <router-link class="list-group-item" to="" v-for="section in sections" :key="section.id">
-                            {{ section.label }}
-                        </router-link>
-                    </ul>
+                <div class="slider-menu">
+                    <div class="menu-content">
+                        <h5>Navegação</h5>
+                        <ul class="list-group" v-scroll-spy-active="{class: 'watched'}" v-scroll-spy-link>
+                            <router-link class="list-group-item" to="" v-for="section in sections" :key="section.id">
+                                {{ section.label }}
+                            </router-link>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
-            <div id="content" class="col-md order-md-2">
-                <import-file :id="filePlace" :file_name="ombudsman.id" :post_function="uploadFile"/>
+            <div class="content">
+                <div class="row">
+                    <import-file :id="filePlace" :file_name="ombudsman.id" :post_function="uploadFile"/>
+                </div>
 
-                <div data-target="#form" v-scroll-spy>
+                <div data-target=".slider-menu" v-scroll-spy>
                                     
                     <section :id="sections.code.id">
                         <row :label="sections.code.label">
                             <div v-if="!id">
-                                <v-select v-model="ombudsmanId" name="Ombudsman-Id" :data-vv-as="sections.code.label" v-validate data-vv-rules="required" label="id" :options="values.ombudsmans" @input="loadOmbudsman()"/>
+                                <v-select v-model="ombudsmanId" name="Ombudsman-Id" :data-vv-as="sections.code.label" v-validate data-vv-rules="required" label="id" :options="values.ombudsmans" @input="loadOmbudsman()" :disabled="values.ombudsmans.length == 0"/>
                                 <require-text :error="errors.has('Ombudsman-Id')" :text="errors.first('Ombudsman-Id')"/>
                             </div>
                             <div v-else>
@@ -64,12 +68,11 @@
 
                                 <div class='row'>
                                     <rows :label="subtitles.personData.reporterName">
-                                        <input type="text" name="Ombudsman-ombudsmanUser-reporterName" v-validate data-vv-rules="required" :data-vv-as="subtitles.personData.reporterName" class="form-control" v-model="ombudsman.ombudsmanUser.declarantName">
-                                        <require-text :error="errors.has('Ombudsman-ombudsmanUser-reporterName')" :text="errors.first('Ombudsman-ombudsmanUser-reporterName')"/>
+                                        <input type="text" name="Ombudsman-ombudsmanUser-reporterName" :data-vv-as="subtitles.personData.reporterName" class="form-control" v-model="ombudsman.ombudsmanUser.declarantName">
                                     </rows>
 
                                     <rows :label="subtitles.personData.reporterEmail">
-                                        <input type="text" name="Ombudsman-ombudsmanUser-reporterEmail" v-validate data-vv-rules="required|email" :data-vv-as="subtitles.personData.reporterEmail" class="form-control" v-model="ombudsman.ombudsmanUser.email">
+                                        <input type="text" name="Ombudsman-ombudsmanUser-reporterEmail" v-validate data-vv-rules="email" :data-vv-as="subtitles.personData.reporterEmail" class="form-control" v-model="ombudsman.ombudsmanUser.email">
                                         <require-text :error="errors.has('Ombudsman-ombudsmanUser-reporterEmail')" :text="errors.first('Ombudsman-ombudsmanUser-reporterEmail')"/>
                                     </rows>
                                 </div>
@@ -86,14 +89,9 @@
                                 <hr>
 
                                 <div class='row'>
-                                    <rows :label="subtitles.address.street" class="col-md-3">
-                                        <input type="text" name="Ombudsman-address-street" v-validate data-vv-rules="required" :data-vv-as="subtitles.address.street" class="form-control" v-model="address.street">
-                                        <require-text :error="errors.has('Ombudsman-address-street')" :text="errors.first('Ombudsman-address-street')"/>
-                                    </rows>
-                                    
-                                    <rows :label="subtitles.address.number" class="col-md-2">
-                                        <input type="text" name="Ombudsman-address-number" v-validate data-vv-rules="required|numeric" :data-vv-as="subtitles.address.number" class="form-control" v-model="address.number">
-                                        <require-text :error="errors.has('Ombudsman-address-number')" :text="errors.first('Ombudsman-address-number')"/>
+                                    <rows :label="subtitles.address.city" class="col-md-3">
+                                        <input type="text" name="Ombudsman-address-city" v-validate data-vv-rules="required" :data-vv-as="subtitles.address.city" class="form-control" v-model="address.city">
+                                        <require-text :error="errors.has('Ombudsman-address-city')" :text="errors.first('Ombudsman-address-city')"/>
                                     </rows>
 
                                     <rows :label="subtitles.address.neighborhood" class="col-md-3">
@@ -101,9 +99,14 @@
                                         <require-text :error="errors.has('Ombudsman-address-neighborhood')" :text="errors.first('Ombudsman-address-neighborhood')"/>
                                     </rows>
 
-                                    <rows :label="subtitles.address.city">
-                                        <input type="text" name="Ombudsman-address-city" v-validate data-vv-rules="required" :data-vv-as="subtitles.address.city" class="form-control" v-model="address.city">
-                                        <require-text :error="errors.has('Ombudsman-address-city')" :text="errors.first('Ombudsman-address-city')"/>
+
+                                    <rows :label="subtitles.address.street" class="col-md-2">
+                                        <input type="text" name="Ombudsman-address-street" class="form-control" v-model="address.street">
+                                    </rows>
+                                    
+                                    <rows :label="subtitles.address.number" class="col-md-2">
+                                        <input type="text" name="Ombudsman-address-number" v-validate data-vv-rules="numeric" :data-vv-as="subtitles.address.number" class="form-control" v-model="address.number">
+                                        <require-text :error="errors.has('Ombudsman-address-number')" :text="errors.first('Ombudsman-address-number')"/>
                                     </rows>
 
                                     <rows :label="subtitles.address.postCode">
@@ -129,8 +132,8 @@
                         </div>
                         
                         <div id="user-informations-person" class="card border-secondary mb-2" >
-                            
-                            <div class="card-body" v-if="ombudsman.origin">
+                                
+                            <div class="card-body" v-if="JSON.stringify(ombudsman.origin) != '{}'">
                                 
                                 <row label='Leito' v-if="ombudsman.origin.id == 'INT'">
                                     <input type="text" name="Ombudsman-bed" v-validate data-vv-rules="required" data-vv-as="Leito" class="form-control" v-model="ombudsman.bed">
@@ -215,8 +218,7 @@
                                     <hr>
 
                                     <row>
-                                        <textarea name="Ombudsman-ombudsmanUser-sugestion" v-validate data-vv-rules="required" :data-vv-as="subtitles.description.sugestion" class="form-control" cols="30" rows="4" v-model="ombudsman.ombudsmanUserSugestion" placeholder="Sugestão: "></textarea>
-                                        <require-text :error="errors.has('Ombudsman-ombudsmanUser-sugestion')" :text="errors.first('Ombudsman-ombudsmanUser-sugestion')"/>
+                                        <textarea name="Ombudsman-ombudsmanUser-sugestion" class="form-control" cols="30" rows="4" v-model="ombudsman.ombudsmanUserSugestion" placeholder="Sugestão: "></textarea>
                                     </row>
 
                                 </div>
@@ -262,9 +264,9 @@
 
         </div>
 
-        <div id="buttons">
+        <div class="navigation-bottom mt-3">
             <row>
-                <button class="btn btn-outline-secondary btn-lg" id="submit-button" type="button" @click="isValidForm" :disabled="sending">
+                <button class="btn btn-outline-secondary btn-lg" id="submit-button" type="button" @click="isValidForm" :disabled="sending" v-if="ombudsman.id">
                     Registrar Ouvidoria
                 </button>
                 <router-link class="btn btn-outline-primary btn-lg" :to="{name: 'ouvidoria'}" tag="button" :disabled="sending">
@@ -317,7 +319,6 @@ export default {
                 code: { id: "code", label: "Código"},
                 userInformations: { id: "user-informations", label: "Dados do Relator"},
                 ombudsmanPlace: { id: "ombudsman-place", label: "Local da Ouvidoria"},
-                // type: { id: "ombudsman-type", label: "Tipos de Ouvidoria"},
                 demands: { id: "demands", label: "Demandas"},
                 report: { id: "report", label: "Relato"},
                 ombudsmanReport: { id: "ombudsman-report", label: "Ouvidor"},
@@ -337,7 +338,14 @@ export default {
     },
     methods: {
         loadValues() {
-            getter.getOmbudsmansWaiting().then(res => { this.values.ombudsmans = res; })
+            getter.getOmbudsmansWaiting().then(res => {
+                if(res.length === 0) {
+                    this.$alert.danger('Você não tem ouvidorias cadastradas')
+                } else {
+                    this.values.ombudsmans = res;
+
+                }
+            })
             getter.getDemands().then(res => { this.values.demands = res; })
             GetterGroup.getGroups().then(res => { this.values.groups = res; })
             if(this.isEdit()) {
@@ -376,7 +384,7 @@ export default {
         submit() {
             this.sending = true
             this.ombudsman.ombudsmanUser.address = this.userAddress
-            
+
             model.doUpdate(this.ombudsman).then(res => { 
                 this.sending = false
                 this.$router.push({ name: "ouvidoria" })
@@ -397,8 +405,18 @@ export default {
             return DemandModel.demandExist(this.ombudsman.demands, this.demandSelected)
         },
         userAddress() {
-            let postCode = this.address.postCode ? ` - CEP: ${this.address.postCode}`:""
-            return `${this.address.street}, Nº ${this.address.number} - ${this.address.neighborhood} - ${this.address.city} ${postCode}`
+            let address = `${this.address.city} - B. ${this.address.neighborhood}`
+            if(this.address.street) {
+                address += ` - ${this.address.street}`
+            }
+            if(this.address.number) {
+                address += `, Nº ${this.address.number}`
+            }
+            if(this.address.postCode) {
+                address += ` - CEP: ${this.address.postCode}`
+            }
+            
+            return address
         },
         filePlace() {
             let id = false
@@ -422,24 +440,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .subtitle {
         text-align: left;
         font-size: 17px;
-    }
-
-    #ombudsman-logged {
-        text-align: right;
-        margin-right: 20px;
-    }
-
-    #navigation div {
-        display: block;
-        position: fixed;
-
-        margin-top: -1%;
-        max-width: 12%;
-        margin-left: -1%;
     }
 
     .watched {
@@ -447,31 +451,28 @@ export default {
         color:grey;
     }
 
-    @media (min-width: 1301px) {
-        #navigation div {
-            margin-top: -2%;
-        }
+    .navigation-bottom {
+        position: absolute;
     }
 
-    @media (max-width: 1300px) and (min-width: 1000px) {
-        .type {
-            min-width: 200px;
+    .page-container {
+        display: flex;
+        justify-content: center;
+
+        .navigation {
+            position: relative;
+            width: 22rem;
+
+            .slider-menu {
+                width: 18rem;
+                display: flex;
+                justify-content: center;
+
+                .menu-content {
+                    position: fixed;
+                }
+            }
         }
 
-        #navigation div {
-            margin-top: -6%;
-        }
     }
-
-    
-    @media (max-width: 900px) {
-        .type {
-            min-width: 250px;
-        }
-
-        #navigation div {
-            margin-top: -3%;
-        }
-    }
-
 </style>

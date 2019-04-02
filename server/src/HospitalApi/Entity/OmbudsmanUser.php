@@ -58,6 +58,17 @@ class OmbudsmanUser extends SoftdeleteAbstract
         $this->address = '';
     }
 
+    public function setOmbudsmanUser($ombudsmanUser) {
+        $this
+            ->setPatientName($ombudsmanUser['patientName'])
+            ->setBirthday($ombudsmanUser['birthday'])
+            ->setEmail( (isset($ombudsmanUser['email']) && $ombudsmanUser['declarantName']) ? $ombudsmanUser['email'] : null )
+            ->setDeclarantName( (isset($ombudsmanUser['declarantName']) && $ombudsmanUser['declarantName']) ? $ombudsmanUser['declarantName'] : "PRÓPRIO PACIENTE")
+            ->setPhoneNumber($ombudsmanUser['phoneNumber'])
+            ->setAddress($ombudsmanUser['address']);
+        return $this;
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -71,7 +82,7 @@ class OmbudsmanUser extends SoftdeleteAbstract
         return $this->patientName;
     }
     public function setPatientName($patientName) {
-        $this->patientName = $patientName;
+        $this->patientName = strtoupper($patientName);
         
         return $this;
     }
@@ -80,7 +91,7 @@ class OmbudsmanUser extends SoftdeleteAbstract
         return $this->declarantName;
     }
     public function setDeclarantName($declarantName) {
-        $this->declarantName = $declarantName;
+        $this->declarantName = strtoupper($declarantName);
         
         return $this;
     }
@@ -116,7 +127,7 @@ class OmbudsmanUser extends SoftdeleteAbstract
         return $this->address;
     }
     public function setAddress($address) {
-        $this->address = $address;
+        $this->address = strtoupper($address);
         
         return $this;
     }

@@ -21,5 +21,16 @@ const Socket = class {
         return window.$session.get('user').name == user ?
             true : false
     }
+    listenMessages(id) {
+        return new Promise(resolve => {
+            this.io.on(`${id}`, (message) => {
+                message.id = message.id.substr(2)
+                
+                if( !this.isYou(message.user) ) {
+                    resolve(message)
+                }
+            });
+        })   
+    }
 }
 export default Socket

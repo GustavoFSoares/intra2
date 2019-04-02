@@ -59,7 +59,7 @@
             </rows>
 
             <rows>
-                <a class="text-default" v-if="filePath && loadingFile == false" :href="`${$globals.API_SERVER}/file/?filePath=${filePath}&onScreen=1`" target="_blank" @click="showExemple(filePath)">
+                <a class="text-default" v-if="filePath && loadingFile == false" href="" @click.prevent="showExemple(filePath)">
                     <icon class="text-danger" icon="file-pdf" size="2x"/> {{ fileName }}
                 </a>
                 <div v-if="loadingFile">

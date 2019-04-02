@@ -70,6 +70,9 @@ class OmbudsmanMessagesModel extends ModelAbstract
             ->where('om.ombudsman = :ombudsmanId')
             ->setParameter('ombudsmanId', $idOmbudsman);
         $query->getQuery()->execute();
+
+        $messagesNotificationModel = new OmbudsmanMessagesNotificationModel();
+        $messagesNotificationModel->deleteNotifications($idOmbudsman);
     }
 
 }

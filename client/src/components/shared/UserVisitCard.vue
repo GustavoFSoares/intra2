@@ -19,6 +19,12 @@
                 <div class="row">
                     <span class="col text-left">Setor: {{ user.group.name }}</span>
                 </div>
+                <div class="row">
+                    <span class="col text-left">E-mail: 
+                        <span v-if="user.email"> {{ user.email }} </span>
+                        <span v-else class="bold"> Não possui E-mail cadastrado </span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>

@@ -355,23 +355,6 @@ export default {
         justify-content: center;
     }
 
-    .btn-outline-light {
-        color: black;
-    }
-
-    .btn-outline-clean {
-        color: var(--font-color);
-        background-color: transparent;
-        background-image: none;
-        border-color: var(--font-color);
-
-        &.active, &:hover {
-            color: #fff;
-            background-color: var(--font-color);
-            border-color: var(--font-color);
-        }
-    }
-
     // #universal {
     //     display: none;
     //     transition: opacity 1s ease-out;

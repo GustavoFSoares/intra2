@@ -172,6 +172,7 @@ export default {
         margin-left: auto;
         max-width: 80%;
         background-color: rgba(197, 241, 185, 0.514);
+        text-align: right;
     }
 
     #sendMessage-box {

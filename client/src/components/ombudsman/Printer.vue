@@ -1,20 +1,22 @@
 <template>
     <div>
-        <div class='row'>
-            <rows label='<b>Imprimir Ouvidoria</b>'>
+        <div class='list-printers'>
+            <div class="printer">
+                <label><b>Imprimir Ouvidoria:</b></label>
                 <div>
                     <router-link to="" @click.native="open('newFolder')">
                         <icon icon="print" size="3x"/>
                     </router-link>
                 </div>
-            </rows>
-            <rows label='<b>Re-imprimir</b>'>
+            </div>
+            <div class="printer">
+                <label><b>Re-imprimir:</b></label>
                 <div>
                     <router-link to="" @click.native="open('olderOmbudsman')">
                         <icon icon="print" class="text-danger" size="3x"/>
                     </router-link>
                 </div>
-            </rows>
+            </div>
         </div>
         <modal title="Impressão de Ouvidorias" ref="newFolder" @return="exportFile()">
             <div class='row pull-center'>
@@ -69,10 +71,10 @@ export default {
             }
         },
         doPrint() {
-            window.open(`${window.location.protocol}//${window.location.hostname}:3001/ombudsman/doc/reprint/?id=${this.ombudsman.id}&user_id=${this.$session.get('user').id}`, '_target')
+            window.open(`${window.globals.API_SERVER}/ombudsman/doc/reprint/?id=${this.ombudsman.id}&user_id=${this.$session.get('user').id}`, '_target')
         },
         exportFile() {
-            window.open(`${window.location.protocol}//${window.location.hostname}:3001/ombudsman/doc/?page=${this.doc.page}&origin=${this.doc.origin.id}`, '_target')
+            window.open(`${window.globals.API_SERVER}/ombudsman/doc/?page=${this.doc.page}&origin=${this.doc.origin.id}`, '_target')
         }
     },
     mounted() {
@@ -87,3 +89,15 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    .list-printers {
+        display: flex;
+        justify-content: center;
+
+        .printer {
+            padding: 15px;
+        }
+    }
+</style>
+

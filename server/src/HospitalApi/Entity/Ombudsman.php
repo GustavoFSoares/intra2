@@ -181,7 +181,7 @@ class Ombudsman extends SoftdeleteAbstract
         return $this->ombudsmanUserDescription;
     }
     public function setOmbudsmanUserDescription($ombudsmanUserDescription) {
-        $this->ombudsmanUserDescription = $ombudsmanUserDescription;
+        $this->ombudsmanUserDescription = strtoupper($ombudsmanUserDescription);
         
         return $this;
     }
@@ -190,7 +190,7 @@ class Ombudsman extends SoftdeleteAbstract
         return $this->ombudsmanUserSugestion;
     }
     public function setOmbudsmanUserSugestion($ombudsmanUserSugestion) {
-        $this->ombudsmanUserSugestion = $ombudsmanUserSugestion;
+        $this->ombudsmanUserSugestion = strtoupper($ombudsmanUserSugestion);
         
         return $this;
     }
@@ -208,7 +208,7 @@ class Ombudsman extends SoftdeleteAbstract
         return $this->ombudsmanDescription;
     }
     public function setOmbudsmanDescription($ombudsmanDescription) {
-        $this->ombudsmanDescription = $ombudsmanDescription;
+        $this->ombudsmanDescription = strtoupper($ombudsmanDescription);
         
         return $this;
     }
@@ -304,7 +304,7 @@ class Ombudsman extends SoftdeleteAbstract
         return $this->bed;
     }
     public function setBed($bed) {
-        $this->bed = $bed;
+        $this->bed = strtoupper($bed);
         
         return $this;
     }

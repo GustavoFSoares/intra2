@@ -9,6 +9,12 @@ class OuvidoriasFile extends \TCPDF {
 
     public $key;
     public $origin;
+
+    public $mleft = 10;
+    public $mtop = 30;
+    public $mright = -1;
+    public $footer = 0;
+
     public $reprint = false;
     private $_model;
     private $_EnablePageCounter = false;
@@ -40,12 +46,12 @@ class OuvidoriasFile extends \TCPDF {
 	public function Header() {
         $imageFile = FILES.'logo/';
         
-        $this->Image($imageFile."logo-hu.jpg", 10, 10, 35, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-        $this->Image($imageFile."logo-gamp.jpg", 47, 10, 35, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($imageFile."logo-hu-05.jpg", 7, 10, 70, '', 'JPG', '', 'T', true, 600, '', false, false, 0, false, false, false);
+        // $this->Image($imageFile."logo-gamp.jpg", 47, 10, 35, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         
 		$this->SetFont('helvetica', 'B', 15);
         
-        $this->MultiCell(0, 0, 'SERVIÇO DE OUVIDORIA', 0, 'R', 0, 1, '', '', true);
+        $this->MultiCell(0, 0, 'SERVIÇO DE OUVIDORIA', 0, 'R', 0, 2, 10, '', true);
         $this->ln(1);
 
         $this->MultiCell(0, 0, strtoupper($this->origin->getName()), 0, 'R', 0, 1, '', '', true);
@@ -56,12 +62,15 @@ class OuvidoriasFile extends \TCPDF {
 		// Position at 15 mm from bottom
 		$this->SetY(-15);
         
-        $this->SetFont('helvetica', 'I', 8);
-        
         if($this->_EnablePageCounter) {
+            $this->SetFont('helvetica', 'I', 8);
             // Page number
             $this->Cell(0, 10, 'Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
         }
+
+        $this->SetFont('helvetica', 'I', 10);        
+        $this->Cell(0, 10, 'Av. Farroupilha, 8001 - São José - Fone: (51) 3478-8100', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        
     }
     
     public function getContent() {
@@ -129,22 +138,20 @@ class OuvidoriasFile extends \TCPDF {
                 for ($i=0; $i < 17; $i++) { 
                     $html .= "$line\n";
                 }
-    $html .= "  <br>
-                <div>
-                    <span><b>Sugestão / Solicitação:</b></span>
-                </div>";
-                for ($i=0; $i < 7; $i++) { 
-                    $html .= "$line\n";
-                }
-    
+
     $html .= "  <br>
                 <div>
                     <span><b>Assinatura:</b> __________________________________________________________________</span>
                 </div>
-                <div>
-                    <span>Av. Farroupilha, 8001 - São José - Fone: (51) 9478 8033</span>
-                </div>
             </body>";
+
+    $html .= "  <br>
+                <div>
+                    <span><b>Área do Ouvidor:</b></span>
+                </div>";
+                for ($i=0; $i < 7; $i++) { 
+                    $html .= "$line\n";
+                }
 
         return $html;
     }

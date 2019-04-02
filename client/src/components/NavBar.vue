@@ -1,5 +1,6 @@
 <template>
     <div id="navbar">
+        
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <router-link class="navbar-brand" to="/">Home</router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

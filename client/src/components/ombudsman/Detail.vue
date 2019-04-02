@@ -1,12 +1,14 @@
 <template>
         <div class="container">
         
+        <div class="closed" v-if="ombudsman.closed">
+            <span>Finalizado</span>
+        </div>
         <h3 class="text-danger text-right" v-if="permission == 'COMPANION'">Você está acompanhando!</h3>
         <div class='row'>
             <rows class="col-md-9">
-                <h2> {{ombudsman.status}}
+                <h2>
                     #{{ombudsman.id}} - {{ ombudsman.type }} (<i>{{ ombudsman.origin.name }}</i>)
-                    <span class="closed" v-if="ombudsman.answered">(Finalizado)</span>
                 </h2>    
             </rows>
             <rows>
@@ -34,7 +36,7 @@
 
                         <row>
                             <div class='row'>
-                                <rows label='<b>Nome do Relatante</b>'>
+                                <rows label='<b>Nome do Relator</b>'>
                                     <span class="card-text"> {{ ombudsman.ombudsmanUser.declarantName }} </span>
                                 </rows>
                                 
@@ -42,7 +44,7 @@
                                     <a :href="'tel:'+ombudsman.ombudsmanUser.phoneNumber">{{ ombudsman.ombudsmanUser.phoneNumber }}</a>
                                 </rows>
                                 
-                                <rows label='<b>E-mail</b>'>
+                                <rows label='<b>E-mail</b>' v-if="ombudsman.ombudsmanUser.email">
                                     <span class="card-text"> {{ ombudsman.ombudsmanUser.email }} </span>
                                 </rows>
                             </div>
@@ -71,7 +73,7 @@
                 </div>
             </row>
             
-            <row>
+            <row v-if="ombudsman.ombudsmanUserSugestion">
                 <div id="sugestion" class="col">
                     <div class="card border-secondary">
                         <div class="card-body">
@@ -217,17 +219,18 @@
         </section>
 
         <section id="closing-area">
-            <closing v-model="ombudsman.responseToUser" :ombudsmanClosingName="ombudsman.ombudsmanToResponse.name" :gotAdminPermission="gotAdminPermission"/>
+            <closing v-model="ombudsman.responseToUser" name="Ombudsman-closing" v-validate data-vv-rules="required" data-vv-as="Fechamento do Ouvidor" :status="ombudsman.status" :ombudsmanClosingName="ombudsman.ombudsmanToResponse.name" :gotAdminPermission="gotAdminPermission" @click.native="showThisGuy = true"/>
+            <require-text class="validate-text" :error="errors.has('Ombudsman-closing')" :text="errors.first('Ombudsman-closing')" v-if="showThisGuy"/>
         </section>
         
         <div id="buttons">
             <row>
                 <div class="buttons" v-if="gotAdminPermission">
                     <button v-if="(ombudsman.status == 'waiting-manager' || ombudsman.status == 'registered')  && ombudsman.exist()" class="btn btn-outline-warning btn-lg" type="button" @click="closeChat()" :disabled="sending">
-                        Finalizar Mensagens
+                        Finalizar Mensagens <icon icon="spinner" spin v-if="sending"/>
                     </button>
-                    <button v-if="ombudsman.status == 'closed' && ombudsman.exist()" class="btn btn-outline-danger btn-lg" type="button" @click="finishOmbudsman()" :disabled="sending">
-                        Registrar Relato
+                    <button v-else-if="ombudsman.status == 'closed' && ombudsman.exist()" class="btn btn-outline-clean btn-lg" type="button" @click="finishOmbudsman()" :disabled="sending">
+                        Arquivar Ouvidoria <icon icon="spinner" spin v-if="sending"/>
                     </button>
                 </div>
                 <div class="buttons">
@@ -258,16 +261,43 @@ export default {
                 ombudsmans: [],
                 demands: [],
             },
+            showThisGuy: false,
         }
     }, 
     methods: {
         closeChat() {
-            this.sending = true
-            model.closeChat(this.ombudsman).then(res => {
-                this.sending = false
-                this.ombudsman = Object.assign( this.ombudsman, res )
-            }).catch(err => {
-                this.sending = false
+            this.$validator.validateAll().then(success => {
+                
+                if( success ) {
+
+                    Alert.YesNo('Você está <u>finalizando</u> esta ouvidoria', 'Tem certeza que podemos finalizar?').then(res => {
+                        if(res) {
+                            this.sending = true
+                            model.closeChat(this.ombudsman).then(res => {
+                                this.sending = false
+                                this.ombudsman = Object.assign( this.ombudsman, res )
+                            }).catch(err => {
+                                this.sending = false
+                            })
+                        }
+                    })
+                
+                }
+            })
+        },
+        finishOmbudsman() {
+            Alert.YesNo('Você está <u>arquivando</u> esta ouvidoria', 'Tem certeza que podemos arquivar?').then(res => {
+                if(res) {
+
+                    this.sending = true
+                    model.finishOmbudsman( this.ombudsman ).then(res => {
+                        this.sending = false
+                        this.$router.push({ name: 'ouvidoria'})
+                    }).catch(err => {
+                        this.sending = false
+                    })
+
+                }
             })
         },
         addUser(user, type) {
@@ -306,15 +336,6 @@ export default {
                 return this.permission
             }
         },
-        finishOmbudsman() {
-            this.sending = true
-            model.finishOmbudsman( this.ombudsman ).then(res => {
-                this.sending = false
-                this.$router.push({ name: 'ouvidoria'})
-            }).catch(err => {
-                this.sending = false
-            })
-        }
     },
     computed: {
         gotAdminPermission() {
@@ -339,18 +360,28 @@ export default {
     },
     mounted() {
         this.getPermission()
-        getter.getOmbudsmanById(this.id).then(res => { this.ombudsman = res ? new Ombudsman(res) : new Ombudsman() })
+        getter.getOmbudsmanById(this.id).then(res => { this.ombudsman = res ? new Ombudsman(res) : new Ombudsman(); })
     }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
     .closed {
-        color: red;
+        color: var(--danger);
+        font-size: 15rem;
+        z-index: 1;
+        opacity: 0.3;
+        position: absolute;
+        transform: translate(0em, 1.5251em) rotate(-45deg);
+        pointer-events: none;
     }
 
     .buttons {
         display: inline;
     }
 
+    #closing-area .validate-text {
+        position: absolute;
+        margin-top: -40px;
+    }
 </style>
