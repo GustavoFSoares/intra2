@@ -1,5 +1,5 @@
 <template>
-    <vue-google-chart ref="chart" class="chart" :type="chartType" :data="chartData" :options="options"/>    
+    <vue-google-chart ref="chart" class="google-chart-component" :type="chartType" :data="chartData" :options="options"/>    
 </template>
 
 <script>
@@ -9,41 +9,33 @@ export default {
     data() {
         return {
             chartType: '',
-            chartData: null,
             options: {
-                title: this.title,
-                vAxes: { 0: {title: this.vIndex }, },
-                hAxes: { 0: {title: this.hIndex }, },
-                curveType: this.curveType ? 'function':'none'
+                curveType: this.curveType ? 'function':'none',
+                animation: {
+                    duration: 1000,
+                    easing: 'in',
+                    startup: true,
+                },
             },
         }
     },
     props: {
-        data: { type: Array, default: [ ] },
-        title: { type: String, default: 'Titulo' },
-        vIndex: { type: String, default: '' },
-        hIndex: { type: String, default: 'H-Index' },
         curveType: { type: Boolean, default: false },
-        congigurations: { type: Object },
-        showExemple: { type: Boolean, default: false },
         area: { type: Boolean, default: false },
     },
-    methods: {
-        getChartOnHtml() {
-            return this.$refs.chart.$el.innerHTML
+    computed: {
+        dataExemple() {
+            return [ 
+                ['Year', 'Sales', 'Expenses'], 
+                ['2004', 1000, 400], 
+                ['2005', 1170, 460], 
+                ['2006', 660,  1120], 
+                ['2007', 1030, 540]
+            ] 
         }
     },
     created() {
         this.chartType = this.area ? 'AreaChart' : 'LineChart'
-        Object.assign(this.options, this.congigurations)
-        
-        if(this.showExemple || this.data.length == false) {
-            alert( "['Year', 'Sales', 'Expenses']\n ['2004',  1000,      400]\n ['2005',  1170,      460]\n ['2006',  660,       1120]\n ['2007',  1030,      540]" )
-            this.chartData = [['Year', 'Sales', 'Expenses'], ['2004', 1000, 400], ['2005', 1170, 460], ['2006', 660,  1120], ['2007', 1030, 540]]
-        } else {
-            this.chartData = this.data
-        }
-
     }
 }
 </script>
