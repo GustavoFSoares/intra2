@@ -17,37 +17,31 @@
 
                 <div class="report-content">
                     <box class="box">
-
                         <div class="charts">
-
-                            <div class="chart" v-bind:class="{'show': show==1}" @click="show=1">
-                                <box>
-                                    <GooglePieChart :data="[]"/>
-                                    
-                                </box>
+                            
+                            <div class="chart">
+                                <ChartContent>
+                                    <GooglePieChart :exempleMode="true" />
+                                </ChartContent>
                             </div>
 
-                            <div class="chart" v-bind:class="{'show': show==2}" @click="show=2">
-                                <box>
-                                    <GoogleHistogramChart :data="[]"/>
-                                    
-                                </box>
+                            <div class="chart">
+                                <ChartContent>
+                                    <GoogleLineChart :exempleMode="true"/>                                    
+                                </ChartContent>
                             </div>
 
-                            <div class="chart show" v-bind:class="{'show': show==3}" @click="show=3">
-                                <box>
-                                    <GoogleBarChart :data="[]"/>
-                                    
-                                </box>
+                            <div class="chart">
+                                <ChartContent>
+                                    <GoogleBarChart :exempleMode="true" :data="[]"/>
+                                </ChartContent>
                             </div>
 
-                            <div class="chart" v-bind:class="{'show': show==4}" @click="show=4">
-                                <box>
-                                    <GoogleLineChart :data="[]"/>
-                                    
-                                </box>
+                            <div class="chart">
+                                <ChartContent>
+                                    <GoogleHistogramChart :exempleMode="true"/>
+                                </ChartContent>
                             </div>
-
 
                         </div>
 
@@ -64,12 +58,23 @@ import GooglePieChart from "@/components/shared/charts/GooglePieChart.vue";
 import GoogleHistogramChart from "@/components/shared/charts/GoogleHistogramChart.vue";
 import GoogleBarChart from "@/components/shared/charts/GoogleBarChart.vue";
 import GoogleLineChart from "@/components/shared/charts/GoogleLineChart.vue";
+import ChartContent from "@/components/shared/charts/ChartContent.vue";
 
 export default {
     data() {
         return {
             title: 'Relatório Treinamentos',
             show: 0,
+            data: [ ],
+        }
+    },
+    methods: {
+        getRandomInt() {
+            let min = 1, max = 100
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            let ran = Math.floor(Math.random() * (max - min)) + min;
+            return ran
         }
     },
     components: {
@@ -77,11 +82,12 @@ export default {
         GoogleHistogramChart,
         GoogleBarChart,
         GoogleLineChart,
-    }
+        ChartContent,
+    },
 }
 </script>
 
- <style lang="scss" scoped>
+ <style lang="scss">
     .page-container {
         display: flex;
         justify-content: flex-start;
@@ -132,26 +138,9 @@ export default {
         flex-wrap: wrap;
 
         .chart {
-            &:nth-child(even):has(.card) {
-                padding-left: 7px;
-            }
-            &:nth-child(odd):has(.card) {
-                padding-right: 7px;
-            }
             width: 50%;
-            
-            // &.show {
-            //     position: absolute;
-            //     // padding: unset;
-
-            //     z-index: 1;
-            //     width: 100%;
-            //     height: 100%;
-                
-            //     left: 0;
-            //     margin-left: 20px;
-            // }
+            height: 100%;
+            padding: 7px;
         }
-
     }
 </style>
