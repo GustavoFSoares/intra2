@@ -24,7 +24,7 @@ class OmbudsmanNoticicationEmailTemplate extends EmailTemplateAbstract
     }
 
     public function setSubject($ombudsman) {
-        $this->subject = "#{$ombudsman->getId()} Notificação de Incidente - {$ombudsman->getType()}";
+        $this->subject = "#{$ombudsman->getId()} Notificação de Ouvidoria - {$ombudsman->getType()}";
 
         return $this;
     }

@@ -149,6 +149,9 @@ class UserController extends BasicApplicationAbstract
         echo \Helper\LoggerHelper::writeFile("Arquivo analizado: $file\n");
         echo \Helper\LoggerHelper::writeFile("Verificando...\n");
         foreach ($excel->getRows() as $key => $data) {
+            if( empty($data[0]) ) {
+                continue;
+            }
             if($key == 0) {
                 foreach ($data as $key => $label) {
                     $label = \Helper\SlugHelper::get($label);
