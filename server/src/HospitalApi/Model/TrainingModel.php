@@ -78,4 +78,46 @@ class TrainingModel extends SoftdeleteModel
         return parent::doDelete($obj);
     }
 
+    /**
+     * getTrainings
+     *
+     * Obtem a quatidade de relatorios realizados no intervalo
+     * @param array $interval
+     * @
+     * @return void
+     */
+    public function getTrainings(Array $interval = [ ]) {
+        if(!$interval) {
+            $interval = [
+                'begin' => \Helper\DateHelper::getFirstDate(),
+                'end' => \Helper\DateHelper::getLastDate(),
+            ];
+        }
+
+        $select = $this->em->createQueryBuilder();
+        $select->select(
+            [
+                'month(t.beginTime) AS Mes',
+                'count(t.id) AS QuantidadeTreinamentos',
+                // 't.type AS TreinamentoTipo',
+                // 't.institutionalType AS TreinamentoTipoInstitucional',
+                // 'u.name AS InstrutorNome',
+                // 't.workload AS CargaHorariaEmHoras',
+                // 'count(tp.id) AS NumeroParticipantes',
+                // 't.enterprise AS Empresa'
+            ]
+            )->from($this->entityPath, 't')
+            ->innerJoin('HospitalApi\Entity\TrainingParticipant', 'tp', 'WITH', 't = tp.training')
+            // ->innerJoin('HospitalApi\Entity\User', 'u', 'WITH', 'u = t.instructors')
+            // ->where($select->expr()->between('t.beginTime', ':begin', ':end'))
+            // ->setParameter('begin', date($interval['begin']) )
+            // ->setParameter('end', date($interval['end']) )
+            ->andWhere('t.c_removed = 0')
+            ->groupBy('t.beginTime')
+            ->addGroupBy('t.id');
+            
+        // echo $select;die;
+        return $select->getQuery()->getResult();
+    }
+
 }

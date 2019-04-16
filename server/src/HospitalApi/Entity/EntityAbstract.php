@@ -60,7 +60,7 @@ abstract class EntityAbstract extends BasicApplicationAbstract
      * @return String atributos
      */
     public function toString() {
-        $obj;
+        $obj = [];
         foreach ($this->getClassVars() as $var => $value) {
             $obj.="[$var:".$this->$var."]";
         }
@@ -74,7 +74,7 @@ abstract class EntityAbstract extends BasicApplicationAbstract
      * @return Array atributos
      */
     public function toArray() {
-        $obj;
+        $obj = [];
         foreach ($this->getPublicVars() as $var => $value) {
             if($var != 'lazyPropertiesDefaults') 
                 $obj[$var] = $this->$var || $this->$var === false ? $this->$var : "";
@@ -100,7 +100,7 @@ abstract class EntityAbstract extends BasicApplicationAbstract
 		} else {
             $collection = new \Doctrine\Common\Collections\ArrayCollection($entityList->toArray());
             if(!$values instanceof \Doctrine\Common\Collections\ArrayCollection) {
-                $values = new \Doctrine\Common\Collections\ArrayCollection($values);
+                $values = new \Doctrine\Common\Collections\ArrayCollection(Array ($values));
             }
             $exist = [];
             foreach ($values as $row) {
@@ -142,7 +142,7 @@ abstract class EntityAbstract extends BasicApplicationAbstract
      */
     public function _formatDate($date){
         if(!($date instanceof \DateTime) && $date != null) {
-            if(is_array($date) && array_key_exists('date', $date)){
+            if(is_array($date) && isset($date['date']) ){
                 $date = new \DateTime($date['date']);
             } else if(substr($date, -1) == "Z") {
                 $date = explode('T', $date);

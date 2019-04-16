@@ -127,7 +127,6 @@ export default {
         this.getDangerAlert()
     },
     created() {
-        this.banner = true	
         this.mountPrototype()
         this.autoload()
     }

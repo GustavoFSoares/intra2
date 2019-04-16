@@ -27,7 +27,7 @@
 
                             <div class="chart">
                                 <ChartContent>
-                                    <GoogleLineChart :exempleMode="true"/>                                    
+                                    <GoogleLineChart :alertData="true" :data="data"/>                                    
                                 </ChartContent>
                             </div>
 
@@ -84,6 +84,18 @@ export default {
         GoogleLineChart,
         ChartContent,
     },
+    mounted() {
+        const service = require("@/services/client.js").default
+        
+        
+        service.get('training/get-trainings/').then(res => {
+            console.log(res);
+            
+            this.data = res.data
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 }
 </script>
 

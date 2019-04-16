@@ -41,6 +41,7 @@ abstract class ModelAbstract extends BasicApplicationAbstract
 		$devMode = true;
 
 		$config = Setup::createAnnotationMetadataConfiguration($path, $devMode);
+		$config->addCustomDatetimeFunction('month', 'DoctrineExtensions\Query\Mysql');
 		
 		$connectionOptions = [
 			'dbname' => DATABASE_NAME,
