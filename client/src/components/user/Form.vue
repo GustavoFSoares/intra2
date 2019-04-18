@@ -54,6 +54,11 @@
                 <br>
                 <checkbox id="admin" class="button" v-model="User.admin" :disabled="!userSession.admin"/>
             </rows>
+            
+            <rows label="Acesso Imagem">
+                <br>
+                <checkbox id="imagem" class="button" v-model="User.imageAccess" :disabled="!userSession.admin"/>
+            </rows>
         </div>
 
         <!-- <row label="Grupo">

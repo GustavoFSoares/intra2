@@ -58,6 +58,11 @@ class User extends SoftdeleteAbstract
      * @var Boolean @Column(type="boolean", nullable=true, options={"default":false})
      */
     protected $admin;
+    
+    /**
+     * @var Boolean @Column(name="acesso_imagem", type="boolean", nullable=true, options={"default":false})
+     */
+    protected $imageAccess;
 
     /**
      * @var Boolean @Column(name="ativo", type="boolean", nullable=true, options={"default":true})
@@ -100,6 +105,7 @@ class User extends SoftdeleteAbstract
         $this->group = new Group();
         $this->occupation = '';
         $this->admin = false;
+        $this->imageAccess = false;
         $this->byAdp = false;
         $this->activeDirectory = false;
         $this->active = true;
@@ -185,6 +191,18 @@ class User extends SoftdeleteAbstract
     }
     public function setAdmin($admin) {
         $this->admin = $admin ? true : false;
+
+        return $this;
+    }
+    
+    public function getImageAccess() {
+        return $this->imageAccess;
+    }
+    public function isImageAccess() {
+        return $this->getImageAccess();
+    }
+    public function setImageAccess($imageAccess) {
+        $this->imageAccess = $imageAccess ? true : false;
 
         return $this;
     }

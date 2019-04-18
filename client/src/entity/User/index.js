@@ -14,5 +14,6 @@ export default class User {
             this.occupation = user.occupation
             this.active = user.active ? true : false
             this.c_removed = user.c_removed ? true : false
+            this.imageAccess = user.imageAccess ? true : false
         }
 }
