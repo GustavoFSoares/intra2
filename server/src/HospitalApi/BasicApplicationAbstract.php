@@ -1,7 +1,7 @@
 <?php
 namespace HospitalApi;
 use Symfony\Component\Yaml\Yaml;
-
+use Doctrine\ORM\Tools\Setup;
 class BasicApplicationAbstract
 {
 
@@ -67,6 +67,26 @@ class BasicApplicationAbstract
         } else {
             return false;
         }
+    }
+
+    public static function loadDoctrineConfigurations($path, $devMode) {
+        $config = Setup::createAnnotationMetadataConfiguration($path, $devMode);
+
+        $file = file_get_contents(PATH . '/HospitalApi/ExtensionFunctionsDoctrine.yml');
+        $yaml = Yaml::parse($file);
+
+        $functions = $yaml['FUNCTIONS'];
+        $sgbdFunctions = $yaml[strtoupper(DB_SYSTEM)];
+        
+        foreach ($functions as $key => $addFunction) {
+            foreach ($sgbdFunctions[$key] as $key => $class) {
+                $config->$addFunction($key, $class);
+            }
+        }
+        // $config->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+        // $config->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+
+        return $config;
     }
 
 }

@@ -1,0 +1,16 @@
+FUNCTIONS:
+    DATE: addCustomDatetimeFunction
+    NUMERIC: addCustomNumericFunction
+    # STRING: addCustomStringFunction
+    HYDRATOR: addCustomHydrationMode
+
+MYSQL:
+    DATE:
+        MONTH: DoctrineExtensions\Query\Mysql\Month
+        YEAR: DoctrineExtensions\Query\Mysql\Year
+    
+    NUMERIC:
+        TOINT: HospitalApi\DoctrineExtensions\Query\Mysql\ToInteger
+    
+    HYDRATOR:
+        CHART_LINE: HospitalApi\DoctrineExtensions\Hydrators\Chart\LineChartHydrator

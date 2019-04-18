@@ -30,18 +30,20 @@ class TrainingController extends ControllerAbstractLongEntity
         
         $data = $this->getModel()->getTrainings();
         
-        $newRow = [];
-        foreach ($data as &$row) {
-            foreach ($row as $key => $line) {
-                $newRow[] = $line;
-            }
-            $row = $newRow;
-            $newRow = [];
-        }
+        // $newRow = [];
+        // foreach ($data as &$row) {
+        //     // $row['MesInt'] = (int)$row['MesInt'];
+        //     // $row['QuantidadeTreinamentos'] = (int)$row['QuantidadeTreinamentos'];
+        //     foreach ($row as $key => $line) {
+        //         $newRow[] = $line;
+        //     }
+        //     $row = $newRow;
+        //     $newRow = [];
+        // }
         // $data = $newData;
 
         // array_unshift($data, [ 'QuantidadeTreinamentos', 'CargaHorariaEmHoras', 'NumeroParticipantes', ]);
-        array_unshift($data, [ 'CargaHorariaEmHoras', ]);
+        array_unshift($data, [ 'CargaHorariaEmHoras', 'ab', 'c' ]);
         // array_unshift($data, [ 'TreinamentoNome', 'QuantidadeTreinamentos', 'TreinamentoTipo', 'TreinamentoTipoInstitucional', 'CargaHorariaEmHoras', 'NumeroParticipantes', 'Empresa', ]);
 
         return $res->withJson($data);

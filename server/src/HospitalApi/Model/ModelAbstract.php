@@ -4,7 +4,6 @@ namespace HospitalApi\Model;
 
 use HospitalApi\BasicApplicationAbstract;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
 use DateTime;
 
 /**
@@ -40,8 +39,7 @@ abstract class ModelAbstract extends BasicApplicationAbstract
 		$path = ['HospitalApi\Entity'];
 		$devMode = true;
 
-		$config = Setup::createAnnotationMetadataConfiguration($path, $devMode);
-		$config->addCustomDatetimeFunction('month', 'DoctrineExtensions\Query\Mysql');
+		$config = \HospitalApi\BasicApplicationAbstract::loadDoctrineConfigurations($path, $devMode);
 		
 		$connectionOptions = [
 			'dbname' => DATABASE_NAME,

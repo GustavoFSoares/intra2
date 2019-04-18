@@ -24,6 +24,11 @@ export default {
             if(this.exempleMode == true) {
                 return this.dataExemple
             } else {
+                console.log(this.value, 'aqui');
+                
+                if(this.value.length == 0) {
+                    return [['', ''],[0,0]]
+                }
                 return this.value
             }
         }

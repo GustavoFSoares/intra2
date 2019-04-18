@@ -2,9 +2,12 @@
 DEVELOPER:
     HOST: 'localhost'
     DOMAIN: dev
+    IP_SERVER_IMAGE: '10.100.200.100'
     
     DATABASE_NAME: 'hospital_api'
-
+    
+    DB_SYSTEM: 'mysql'
+    
     DB_BOOTSTRAP_HOST: 'mysql'
     DB_BOOTSTRAP_USER: 'root'
     DB_BOOTSTRAP_PASSWORD: 'root'
@@ -39,10 +42,13 @@ DEVELOPER:
 #DESENVOLVIMENTO - WINDOWS ==============================================
 DEVWIN:
     HOST: 'localhost'
+    IP_SERVER_IMAGE: '10.100.200.100'
     DOMAIN: win
     
     DATABASE_NAME: 'intra2_dev'
 
+    DB_SYSTEM: 'mysql'
+    
     DB_BOOTSTRAP_HOST: 'localhost'
     DB_BOOTSTRAP_USER: 'root'
     DB_BOOTSTRAP_PASSWORD: 'root'
@@ -70,9 +76,12 @@ DEVWIN:
 #HOMOLOGAÇÃO ===============================================================
 HOMOLOG:
     HOST: '10.100.200.100'
+    IP_SERVER_IMAGE: '10.100.200.100'
     DOMAIN: homo
     
     DATABASE_NAME: 'intra2_homo'
+    
+    DB_SYSTEM: 'mysql'
     
     DB_BOOTSTRAP_HOST: '10.100.1.33'
     DB_BOOTSTRAP_USER: 'dev'
@@ -101,10 +110,13 @@ HOMOLOG:
 #PRODUÇÃO ==================================================================
 PRODUCTION:
     HOST: '10.100.1.32'
+    IP_SERVER_IMAGE: '10.100.200.100'
     DOMAIN: prod
     
     DATABASE_NAME: 'intra2'
         
+    DB_SYSTEM: 'mysql'
+    
     DB_BOOTSTRAP_HOST: '10.100.1.33'
     DB_BOOTSTRAP_USER: 'dev'
     DB_BOOTSTRAP_PASSWORD: 'devloop356'

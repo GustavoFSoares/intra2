@@ -27,7 +27,7 @@
 
                             <div class="chart">
                                 <ChartContent>
-                                    <GoogleLineChart :alertData="true" :data="data"/>                                    
+                                    <GoogleLineChart v-model="data"/>                                    
                                 </ChartContent>
                             </div>
 
@@ -89,7 +89,7 @@ export default {
         
         
         service.get('training/get-trainings/').then(res => {
-            console.log(res);
+            console.log(res.data);
             
             this.data = res.data
         }).catch(err => {

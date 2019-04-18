@@ -3,6 +3,8 @@
 namespace HospitalApi\Model;
 
 use HospitalApi\Entity\Training;
+use Doctrine\ORM\Query;
+
 /**
  * <b>TraininglModel</b>
  */
@@ -97,8 +99,9 @@ class TrainingModel extends SoftdeleteModel
         $select = $this->em->createQueryBuilder();
         $select->select(
             [
-                'month(t.beginTime) AS Mes',
-                'count(t.id) AS QuantidadeTreinamentos',
+                'YEAR(t.beginTime)',
+                'TOINT( MONTH(t.beginTime) ) AS MesInt',
+                'COUNT(t.id) AS QuantidadeTreinamentos' ,
                 // 't.type AS TreinamentoTipo',
                 // 't.institutionalType AS TreinamentoTipoInstitucional',
                 // 'u.name AS InstrutorNome',
@@ -112,12 +115,11 @@ class TrainingModel extends SoftdeleteModel
             // ->where($select->expr()->between('t.beginTime', ':begin', ':end'))
             // ->setParameter('begin', date($interval['begin']) )
             // ->setParameter('end', date($interval['end']) )
+            // ->setParameter('mes', '' )
             ->andWhere('t.c_removed = 0')
-            ->groupBy('t.beginTime')
-            ->addGroupBy('t.id');
-            
-        // echo $select;die;
-        return $select->getQuery()->getResult();
+            ->groupBy('MesInt');
+            // ->setMaxResults(15)
+        return $select->getQuery()->getResult('CHART_LINE');
     }
 
 }
